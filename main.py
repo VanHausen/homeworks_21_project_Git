@@ -1,43 +1,45 @@
-from logistic_classes import Shop, Store, Request
+from shop import Shop
+
+from store import Store
+
+from request import Request
+
 
 if __name__ == '__main__':
     shop = Shop()
-    shop.add("Печеньки", 5)
-    shop.add("Вафли", 5)
-    shop.add("Помидоры", 5)
-    shop.add("Сок", 5)
+    shop.add("печеньки", 5)
+    shop.add("вафли", 5)
+    shop.add("помидоры", 5)
+    shop.add("сок", 5)
     store = Store()
-    store.add("Печеньки_5", 5)
+    store.add("печеньки_5", 5)
 
     user_str = input()
     user_str_list = user_str.split(" ")
     try:
         user_str_list[1] = int(user_str_list[1])
     except:
-        print("Введите число")
-    if ("Забрать" and "Доставить") not in user_str_list[0].lower():
-        print("Введите 'Забрать/Доставить'")
-    elif ("Магазин" and "Склад") not in user_str_list[4].lower():
-        print("Введите место назначения")
+        print("введите число")
+    if ("забрать" and "доставить") not in user_str_list[0].lower():
+        print("Введите 'забрать/доставить'")
+    elif ("магазин" and "склад") not in user_str_list[4].lower():
+        print("введите место назначения")
     else:
         r = Request(user_str)
         print(r)
-        if "Магазин" in r.from_:
+        if "магазин" in r.from_:
             print("Доставка возможна только со склада")
-        elif "Склад" in r.from_:
-            if r.product in store.get_item():
-                if r.amount <= store.get_item()[r.product]:
-                    print("Нужное количество есть на складе")
-                    print("Курьер везет со склад в магазин")
-                    if sum(shop.get_item().values()) + int(r.amount) < shop.capacity:
-                        print(f"Курьер доставил {r.amount} {r.product} в магазин")
-                        store.remove(r.product, r.amount)
-                        shop.add(r.product, r.amount)
-
-                    else:
-                        print("В магазин недостаточно места, попобуйте что-то другое")
-                else:
-                    print("Не хватает на складе, попробуйте заказать меньше")
+        elif "склад" in r.from_:
+            if r.product in store.get_item() and r.amount <= store.get_item()[r.product]:
+                print("Нужное количество есть на складе")
+                print("Курьер везет со склад в магазин")
+            else:
+                print("В магазин недостаточно места, попробуйте что-то другое")
+                print("Не хватает на складе, попробуйте заказать меньше")
+            if sum(shop.get_item().values()) + int(r.amount) < shop.capacity:
+                print(f"Курьер доставил {r.amount}{r.product} в магазин")
+                store.remove(r.product, r.amount)
+                shop.add(r.product, r.amount)
             else:
                 print("Такого товара нет на складе")
 
