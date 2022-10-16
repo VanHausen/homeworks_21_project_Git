@@ -6,14 +6,12 @@ class Store(Storage):
         self.items = {}
         self.capacity = 100
 
+
     def add(self, name, count):
-        is_found = False
         if self.get_free_space() > count:
-            for key in self.items.keys():
-                if name == key:
-                    self.items[key] = self.items[key] + count
-                    is_found = True
-            if not is_found:
+            if name in self.items:
+                self.items[name] += count
+            else:
                 self.items[name] = count
             print("Товар добавлен")
         else:
